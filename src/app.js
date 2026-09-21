@@ -1,17 +1,17 @@
 let express=require("express");
 let app=express();
 
-app.use("/te",(req,res)=>{
-  res.send("home sriram siri")
+const {adminauth}=require('./middlewares/adminauth')
+app.use("/admin",adminauth)
+  
 
+
+app.get("/admingetdata",(req,res)=>{
+     res.send("sgotdata")
 })
+app.get("/admindeletedata",(req,res)=>{
+ res.send("sdeletedata")
 
-app.use("/home",(req,res)=>{
- res.send("hello hello")
-
-})
-app.use("/test",(req,res)=>{
-  res.send("test page here")
 
 })
 
