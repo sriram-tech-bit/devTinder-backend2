@@ -1,24 +1,43 @@
 let express=require("express");
 let app=express();
+const {connectDb}=require("./config/database")
+let User=require("./model/User")
+app.post("/signUp",async(req,res)=>{
 
-const {adminauth}=require('./middlewares/adminauth')
-app.use("/admin",adminauth)
-  
-
-
-app.get("/admingetdata",(req,res)=>{
-     res.send("sgotdata")
-})
-app.get("/admindeletedata",(req,res)=>{
- res.send("sdeletedata")
-
+   let userInstance=new User({
+      firstName:"siri",
+      lastName:"chintalapalli",
+      age:23,
+      Gender:"FeMale"
 
 })
+   try{
+    await userInstance.save();
+   res.send("sucessfully signUp");
+   }
+   catch(err){
+     res.send(err.message)
+   }
 
-app.listen(3000,()=>{
-    console.log("successfully connected to server")
+
 
 })
+
+
+
+connectDb().then(()=>{
+ console.log("sucessfully connected to database")
+ app.listen(3000,()=>{
+console.log("successfully connected to server")
+
+})
+
+
+}).catch((err)=>{
+  console.error(err.message)
+
+})
+
 
 
 
