@@ -1,12 +1,14 @@
-let mongoose=require("mongoose")
+let mongoose=require("mongoose");
+const User = require("./User");
 
 let ConnectionRequestSchema=mongoose.Schema({
 fromUserId:{
-type:mongoose.Schema.Types.ObjectId
-
+type:mongoose.Schema.Types.ObjectId,
+ref:User
 },
 toUserId:{
-    type:mongoose.Schema.Types.ObjectId
+    type:mongoose.Schema.Types.ObjectId,
+    ref:User
 },
 status:{
     type:String,
