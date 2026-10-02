@@ -31,7 +31,7 @@ let loggedInUser=req.user._id;
  ]
  }
 ).
-populate("fromUserId","firstName lastName gender").populate("toUserId","firstName lastName,age gender")
+populate("fromUserId","firstName lastName gender photoUrl").populate("toUserId","firstName lastName,age gender photoUrl")
 
 let connections=Connections.map((row)=>{
     if(row.fromUserId._id.equals(loggedInUser._id)){

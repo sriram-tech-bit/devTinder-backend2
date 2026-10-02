@@ -2,9 +2,14 @@ let express=require("express");
 let app=express();
 let cookieparser=require("cookie-parser")
 const {connectDb}=require("./config/database")
-
+let cors=require("cors")
 app.use(express.json());
 app.use(cookieparser())
+app.use(cors({
+origin:"http://localhost:5173",
+credentials:true
+
+}))
 let authRouter=require("./routes/auth")
 let profileRouter=require("./routes/profile")
 let ConnectionRouter=require("./routes/request")

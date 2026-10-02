@@ -6,7 +6,7 @@ try{
      let cookieObj=req.cookies;
 const{token}=cookieObj
 if(!token){
-    throw new Error("invalid token")
+   return res.status(401).send("please login")
 }
 let decode=jwt.verify(token,"devTinder2@1234")
 let user=await User.findOne({_id:decode._id})

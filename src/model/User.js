@@ -56,8 +56,6 @@ passWord:{
 
   }
 
-  
-
 },
 about:{
     type:String,
@@ -66,10 +64,15 @@ about:{
 },
 photoUrl:{
     type:String,
-    default:"https://static.vecteezy.com/system/resources/previews/036/594/092/non_2x/man-empty-avatar-photo-placeholder-for-social-networks-resumes-forums-and-dating-sites-male-and-female-no-photo-images-for-unfilled-user-profile-free-vector.jpg"
+    trim:true,
+    default:"https://static.vecteezy.com/system/resources/previews/036/594/092/non_2x/man-empty-avatar-photo-placeholder-for-social-networks-resumes-forums-and-dating-sites-male-and-female-no-photo-images-for-unfilled-user-profile-free-vector.jpg",
+    validate(value){
+      if(!value) return
+      if(!validator.isURL(value,{protocols:["http","https"],require_protocol:true})){
+        throw new Error("PhotoUrl must be a valid http or https link")
+      }
+    }
 },
-
-
 gender:{
     type:String,
     required:true,
@@ -77,19 +80,9 @@ gender:{
     validate(value){
     if(!["male","female","others"].includes(value)){
          throw new Error("gender data is not valid")
-          
     }
-
     }
 }
-
-
-
-
-
-
-
-
 
 },{ timestamps: true })
 
@@ -103,6 +96,5 @@ userSchema.methods.validatePassWord=async function(passWord){
     let user=this;
 return await bcrypt.compare(passWord, user.passWord)
 }
- 
 
 module.exports=mongoose.model("User",userSchema);

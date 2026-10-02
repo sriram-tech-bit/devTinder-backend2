@@ -8,10 +8,12 @@ authRouter.post("/login",async(req,res)=>{
   try{
   const {emailId,passWord}=req.body;
  let user=await User.findOne({emailId:emailId})
+ 
   if(!user){
    return  res.status(401).send("invalid credentials")
   }
-  let isvalidpassword=user.validatePassWord(passWord)
+  let isvalidpassword=await user.validatePassWord(passWord)
+  
   if(!isvalidpassword){
    return  res.status(401).send("invalid credentials")
   }
@@ -19,7 +21,7 @@ authRouter.post("/login",async(req,res)=>{
     let token=user.getJwt() 
     
     res.cookie("token",token,{expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)})
-    res.send("login sucess")
+    res.send(user)
 
   }
 
@@ -44,11 +46,15 @@ authRouter.post("/signUp",async(req,res)=>{
          gender
 })  
    try{
-    await userInstance.save();
-    res.send("sucessfully signUp");
+
+    let savedUser=await userInstance.save();
+    let token=savedUser.getJwt() 
+    
+    res.cookie("token",token,{expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)})
+    res.send(userInstance);
     }
     catch(err){
-      res.send(err.message)
+      res.status(400).send(err.message)
     }
 
 })
