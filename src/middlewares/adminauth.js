@@ -8,7 +8,7 @@ const{token}=cookieObj
 if(!token){
    return res.status(401).send("please login")
 }
-let decode=jwt.verify(token,"devTinder2@1234")
+let decode=jwt.verify(token, process.env.SECRET_KEY)
 let user=await User.findOne({_id:decode._id})
 if(!user){
     throw new Error("user not found")

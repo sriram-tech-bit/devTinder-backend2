@@ -5,6 +5,7 @@ const {connectDb}=require("./config/database")
 let cors=require("cors")
 app.use(express.json());
 app.use(cookieparser())
+require('dotenv').config()
 app.use(cors({
 origin:"http://localhost:5173",
 credentials:true
