@@ -1,17 +1,27 @@
-const { SESClient, SendEmailCommand } = require("@aws-sdk/client-ses");
+const nodemailer = require("nodemailer");
 
-const ses = new SESClient({ region: "ap-southeast-2" });
-
-async function sendEmail(to, subject, body) {
-  const command = new SendEmailCommand({
-    Source: "sriramulu.sriram33@gmail.com",
-    Destination: { ToAddresses: [to] },
-    Message: {
-      Subject: { Data: subject },
-      Body: { Text: { Data: body } },
-    },
-  });
-  return ses.send(command);
+// Create a transporter using SMTP
+const transporter = nodemailer.createTransport({
+   service: "gmail",
+   auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
+const sendEmail=async(to,subject,text,html)=>{
+try {
+  const info = await transporter.sendMail({
+    from: `"devTinder" ${process.env.EMAIL_USER}`, 
+    to,
+    subject, 
+    text,
+    html:html|| `<p>${text}</p>`
+  })
+ 
 }
-
-module.exports = sendEmail;
+  
+ catch (err) {
+  console.error("Error while sending mail:", err);
+}
+}
+module.exports={sendEmail}

@@ -3,7 +3,7 @@ const userAuth = require("../middlewares/adminauth");
 let ConnectionRouter = express.Router();
 let ConnectionRequestModel = require("../model/ConnectionRequest")
 let User = require("../model/User")
-const sendEmail = require("../utils/sendEmail");
+
 
 ConnectionRouter.post("/request/send/:status/:toUserId", userAuth, async (req, res) => {
   try {
@@ -39,16 +39,14 @@ ConnectionRouter.post("/request/send/:status/:toUserId", userAuth, async (req, r
       status
     })
     await connectionRequestInstance.save()
-
-    // email the person who received the request
-    if (status === "intrested") {
+  if (status === "intrested") {
       sendEmail(
         user.emailId,
-        `${req.user.firstName} is interested in you on DevTinder`,
-        `Hi ${user.firstName}, ${req.user.firstName} sent you a connection request. Log in to review it: https://devtinder-sriram.duckdns.org`
-      ).catch((err) => console.error("Request email failed:", err.message))
+        "New connection request on devTinder",
+        `${req.user.firstName} is interested in connecting with you. Log in to respond.`
+      );
     }
-
+    
     res.status(201).send(` your send ${status} to other user`)
   }
   catch (err) {
@@ -76,17 +74,7 @@ ConnectionRouter.post("/request/review/:status/:reqId", userAuth, async (req, re
     connectionRequests.status = status;
     await connectionRequests.save();
 
-    // email the sender when their request is accepted
-    if (status === "accepted") {
-      const sender = await User.findById(connectionRequests.fromUserId);
-      if (sender) {
-        sendEmail(
-          sender.emailId,
-          "Your DevTinder request was accepted",
-          `Hi ${sender.firstName}, ${req.user.firstName} accepted your connection request. Log in to start chatting: https://devtinder-sriram.duckdns.org`
-        ).catch((err) => console.error("Accept email failed:", err.message))
-      }
-    }
+    
 
     res.status(200).json({ message: `Request ${status}`, data: connectionRequests });
   }

@@ -4,8 +4,7 @@ let bcrypt = require("bcrypt")
 let jwt = require("jsonwebtoken")
 let User = require("../model/User")
 let userAuth = require("../middlewares/adminauth")
-const sendEmail = require("../utils/sendEmail")
-
+const {sendEmail}=require("../utils/sendEmail")
 authRouter.post("/login", async (req, res) => {
   try {
     const { emailId, passWord } = req.body;
@@ -23,12 +22,8 @@ authRouter.post("/login", async (req, res) => {
       let token = user.getJwt()
 
       res.cookie("token", token, { expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) })
-
-      sendEmail(
-        user.emailId,
-        "New login to DevTinder",
-        `Hi ${user.firstName}, you just logged in to DevTinder.`
-      ).catch((err) => console.error("Login email failed:", err.message))
+     sendEmail(user.emailId,"You login to devTinder","You just logged in. If this wasn't you, please change your password.")
+      
 
       res.send(user)
     }
@@ -50,15 +45,12 @@ authRouter.post("/signUp", async (req, res) => {
   })
   try {
     let savedUser = await userInstance.save();
+    sendEmail(savedUser.emailId, "Welcome to devTinder", `Hi ${savedUser.firstName}, your account is ready!`);
     let token = savedUser.getJwt()
 
     res.cookie("token", token, { expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) })
 
-    sendEmail(
-      savedUser.emailId,
-      "Welcome to DevTinder",
-      `Hi ${savedUser.firstName}, welcome to DevTinder! Start connecting with developers today.`
-    ).catch((err) => console.error("Welcome email failed:", err.message))
+    
 
     res.send(userInstance);
   }
