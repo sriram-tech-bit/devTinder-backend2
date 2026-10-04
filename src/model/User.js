@@ -88,9 +88,11 @@ gender:{
 
 userSchema.methods.getJwt=function(){
 let user=this
-let token=jwt.sign({_id:user._id},"devTinder2@1234",{ expiresIn: '1h' }) 
+let token=jwt.sign({_id:user._id},process.env.SECRET_KEY,{ expiresIn: '1h' }) 
 return token 
-
+git add .
+git commit -m "use env for jwt secret"
+git push
 }
 userSchema.methods.validatePassWord=async function(passWord){
     let user=this;
