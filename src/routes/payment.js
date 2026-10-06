@@ -3,6 +3,7 @@ const userAuth = require("../middlewares/adminauth");
 const razorpayInstance = require("../utils/razorpay");
 const plans = require("../utils/const");
 const Payment = require("../model/Payment");
+const User = require("../model/User");
 
 const {
   validateWebhookSignature,
