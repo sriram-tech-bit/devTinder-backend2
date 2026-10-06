@@ -54,6 +54,12 @@ paymentRouter.post("/payment/create", userAuth, async (req, res) => {
 paymentRouter.post("/payment/webhook", async (req, res) => {
   try {
     const signature = req.get("X-Razorpay-Signature");
+    if (!signature) {
+       return res.status(400).json({ msg: "Missing signature" });
+    }if (!signature) {
+  return res.status(400).json({ msg: "Missing signature" });
+}
+
 
     const isValid = validateWebhookSignature(
       JSON.stringify(req.body),
