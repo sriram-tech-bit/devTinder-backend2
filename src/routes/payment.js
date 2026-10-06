@@ -97,13 +97,13 @@ paymentRouter.post("/payment/webhook", async (req, res) => {
 });
 paymentRouter.get("/premium/verify", userAuth, async (req, res) => {
   try {
-   e
     const user = await User.findById(req.user._id).select("isPremium membershipType");
     res.json({
       isPremium: !!user?.isPremium,
       membershipType: user?.membershipType || null,
     });
   } catch (err) {
+    console.error("verify error:", err);
     res.status(500).json({ message: err.message });
   }
 });
