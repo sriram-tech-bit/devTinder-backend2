@@ -55,11 +55,8 @@ paymentRouter.post("/payment/webhook", async (req, res) => {
   try {
     const signature = req.get("X-Razorpay-Signature");
     if (!signature) {
-       return res.status(400).json({ msg: "Missing signature" });
-    }if (!signature) {
-  return res.status(400).json({ msg: "Missing signature" });
-}
-
+      return res.status(400).json({ msg: "Missing signature" });
+    }
 
     const isValid = validateWebhookSignature(
       JSON.stringify(req.body),
@@ -80,17 +77,15 @@ paymentRouter.post("/payment/webhook", async (req, res) => {
     if (!payment) {
       return res.status(200).json({ msg: "order not found" });
     }
-    if (payment.status === "captured") {
-      return res.status(200).json({ msg: "already processed" });
-    }
 
-    payment.status = details.status;
+    payment.status = details.status; // "captured"
     payment.paymentId = details.id;
     await payment.save();
 
-    await User.findByIdAndUpdate(payment.userId, {
+    // upgrade the user (setting it twice is harmless)
+    await User.findByIdAndUpdate(payment.UserId, {
       isPremium: true,
-      membershipType: payment.notes?.membershipType,
+      membershipType: payment.planType,
     });
 
     return res.status(200).json({ msg: "Webhook received successfully" });
@@ -99,7 +94,6 @@ paymentRouter.post("/payment/webhook", async (req, res) => {
     return res.status(500).json({ msg: err.message });
   }
 });
-
 paymentRouter.get("/premium/verify", userAuth, async (req, res) => {
   try {
    e
