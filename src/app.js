@@ -1,6 +1,9 @@
 let express=require("express");
 let app=express();
 let cookieparser=require("cookie-parser")
+let server=require("http").createServer(app)
+let {initialSocket}=require("./utils/socket")
+
 const {connectDb}=require("./config/database")
 let cors=require("cors")
 app.use(express.json());
@@ -23,9 +26,11 @@ app.use("/",userRouter)
 app.use("/",paymentRouter)
 
 
+initialSocket(server);
+
 connectDb().then(()=>{
  console.log("sucessfully connected to database")
- app.listen(3000,()=>{
+ server.listen(3000,()=>{
 console.log("successfully connected to server")
 
 })
