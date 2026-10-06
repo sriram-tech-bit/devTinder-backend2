@@ -82,6 +82,13 @@ gender:{
          throw new Error("gender data is not valid")
     }
     }
+},
+isPremium: {
+  type: Boolean,
+  default: false,
+},
+membershipType: {
+  type: String,
 }
 
 },{ timestamps: true })

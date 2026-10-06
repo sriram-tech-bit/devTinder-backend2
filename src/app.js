@@ -15,10 +15,12 @@ let authRouter=require("./routes/auth")
 let profileRouter=require("./routes/profile")
 let ConnectionRouter=require("./routes/request")
 let userRouter=require("./routes/user")
+let paymentRouter=require("./routes/payment")
 app.use("/",authRouter)
 app.use("/",profileRouter)
 app.use("/",ConnectionRouter);
 app.use("/",userRouter)
+app.use("/",paymentRouter)
 
 
 connectDb().then(()=>{
