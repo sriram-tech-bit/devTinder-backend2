@@ -3,11 +3,10 @@ let socket = require("socket.io");
 let initialSocket=(server)=>{
 let io=socket(server,{
   cors:{
-    origin:"http://localhost:5173",
+    origin:["http://localhost:5173","https://devtinder-sriram.duckdns.org"],
+    credentials:true,
   }
-  
-
-  })
+})
 
  io.on("connection",(socket)=>{
      socket.on("joinChat",({touserId,userId})=>{
